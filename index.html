@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+    <style>
+        body {
+            background-color: #BEA9DF;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        h1 {
+            text-align: center;
+            border-style: double;
+            border-radius: 8px;
+            background-color: rgb(250, 212, 136);
+            border-width: 4px;
+           border-color: rgb(91, 66, 104);
+            color: rgb(91, 66, 104);
+        }
+        form {
+            background-color: antiquewhite;
+            border: 3px solid rgb(91, 66, 104);
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            text-align: center;
+            border-style: double;
+            background-color: rgb(250, 212, 136);
+            border-width: 4px;
+           border-color: rgb(91, 66, 104);
+            color:rgb(91, 66, 104);
+        }
+        label {
+            color: rgb(91, 66, 104);
+            font-size: 20px;
+            padding: 10px;
+        }
+        input {
+            height: 36px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            font-size: 20px;
+            padding: 8px;
+            width: 100px;
+            background-color: rgb(255, 196, 78);
+            border-radius: 8px;
+            border-style: hidden;
+            cursor: pointer;
+        }
+        p.result {
+            font-size: 24px;
+            text-align: center;
+            color: rgb(141, 126, 97);
+        }
+    </style>
+    <!-- Include PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
+<body>
+    <h1>Angella Casul's Grade Caculator</h1>
+    <form id="gradeForm">
+        <h2>Grade Calculator</h2>
+        <hr>
+        <label for="prelim">Enter the prelim grade:</label>
+        <input type="number" id="prelim" name="prelim" min="0" max="100" required>
+        <button type="button" id="calculateBtn">Calculate</button>
+    </form>
+
+    <p id="result" class="result"></p>
+
+    <py-script>
+        from pyscript import Element
+    
+        def calculate_grade(event):
+            prelim = float(Element("prelim").value)
+            passing_grade = 75
+            deans_lister_grade = 90
+            prelimpercent = 0.20
+            midtermpercent = 0.30
+            finalpercent = 0.50
+    
+            # Solution to calculate the required grades for passing and Dean's Lister
+            current_total = prelim * prelimpercent
+            required_total_75 = passing_grade - current_total
+            required_total_90 = deans_lister_grade - current_total
+            midfinalaverage = midtermpercent + finalpercent
+    
+            # Calculate required midterms and finals grades for passing (75%) and Dean's Lister (90%)
+            required_passing_grade = round(required_total_75 / midfinalaverage, 2)
+            required_deans_lister_grade = round(required_total_90 / midfinalaverage, 2)
+    
+            # Prepare the result text for required midterms and finals grade
+            if prelim > 100 or prelim < 0:
+                result_text = "Invalid input. Prelim grade should be between 0-100."
+            elif prelim >= 90:
+                result_text = (
+                    f"-To pass, you need at least {required_passing_grade:.2f}% average in midterms and finals. "
+                    f"Congratulations! You are qualified for Dean's Lister."
+                )
+            else:
+                result_text = (
+                    f"-To pass, you need at least {required_passing_grade:.2f}% average in midterms and finals. "
+                    f"You are not qualified for Dean's Lister. "
+                    f"To qualify for Dean's Lister, you need an average of {required_deans_lister_grade:.2f}% in midterms and finals."
+                )
+    
+            Element("result").write(result_text)
+    
+        # Attach the event listener to the button
+        Element("calculateBtn").element.onclick = calculate_grade
+    </py-script>
+    
+</body>
+</html>
